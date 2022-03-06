@@ -2,6 +2,7 @@
 // where your node app starts
 
 // init project
+require('dotenv').config();
 var express = require('express');
 var app = express();
 
@@ -18,13 +19,78 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+//--------------  v1 ---------------------   wrong
+// // your first API endpoint... 
+// app.get("/api/hello", function (req, res) {
+//   res.json({greeting: 'hello API'});
+// });
 
-// your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
-});
+// app.get('/api/:date?' ,(req ,res)=>{
+//   //get time un suitaple formate
+//   var date  = req.params.date;
+
+//   if(date === undefined){
+//       return res.json({'unix' : new Date().getTime() , 'utc' : new Date().toUTCString()});
+//   }
+
+//   if(date.search('-') <= 0) // if it is in milliscond  convert it to number;
+//       var date  = Number(date);
+  
+//   // handel if date is not invalid
+//   if( new Date(date).toUTCString() === "Invalid Date"){
+//       return res.json({ error : "Invalid Date" });
+//   }
+
+//   //return the need
+//   res.json({'unix' : new Date(date).getTime() , 'utc' : new Date(date).toUTCString()});
+
+// })
 
 
+//------------------------- v2 --------- wrong
+// app.get('/api/:date?' ,(req ,res)=>{
+//   //get time un suitaple formate
+//   var strdate  = req.params.date;
+//   var date ;
+//   if(strdate === undefined){
+//       date = new Date()
+//   }else{
+//       if(strdate.search('-') <= 0) // if it is in milliscond  convert it to number;
+//        {
+//          date  = new Date(Number(strdate)) ;
+//        }else{
+//          date  = new Date(strdate) ;
+//        }   
+//   }
+//   // handel if date is not invalid
+//   if( date.toUTCString() === "Invalid Date"){
+//       return res.json({ error : "Invalid Date" });
+//   }
+//   //return the need
+//   res.json({'unix' : date.valueOf() , 'utc' : date.toGMTString()});
+
+// })
+
+
+app.get('/api/:date' , (req , res)=>{
+  var timestamp = req.params.date;
+  if(!isNaN(timestamp)){
+    timestamp = +timestamp;
+  }
+
+  let date = new Date(timestamp);
+  if(date.getUTCString() == "Invalid Date"){
+    res.json({ error : "Invalid Date" });
+  }else{
+    res.json({ "unix": date.valueOf(), "utc": date.GMTString() });
+  }
+
+})
+
+app.get('/api' , (req,res)=>{
+  let date = new Date();
+  res.json({ "unix": date.valueOf(), "utc": date.GMTString() });
+})
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
