@@ -71,7 +71,7 @@ app.get("/", function (req, res) {
 
 // })
 
-
+// ----------------------   V3  accepted
 app.get('/api/:date' , (req , res)=>{
   var timestamp = req.params.date;
   if(!isNaN(timestamp)){
@@ -79,19 +79,19 @@ app.get('/api/:date' , (req , res)=>{
   }
 
   let date = new Date(timestamp);
-  if(date.getUTCString() == "Invalid Date"){
+  if(date.toUTCString() == "Invalid Date"){
     res.json({ error : "Invalid Date" });
   }else{
-    res.json({ "unix": date.valueOf(), "utc": date.GMTString() });
+    res.json({ "unix": date.valueOf(), "utc": date.toGMTString() });
   }
 
 })
 
 app.get('/api' , (req,res)=>{
   let date = new Date();
-  res.json({ "unix": date.valueOf(), "utc": date.GMTString() });
+  res.json({ "unix": date.valueOf(), "utc": date.toGMTString() });
 })
-
+////////////////////////////////////////////////////////////////////////
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
