@@ -20,10 +20,6 @@
 
 - An empty date parameter should return the current time in a JSON object with a utc key.
 
-## Note:
-
-- .env file contain => [PORT] 
-
 
 #### contact :
  - E_mail : mohamedmostafa6198@gmail.com
